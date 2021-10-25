@@ -238,7 +238,7 @@ def show_post(post_id, logged_in=False, admin=False):
 
             return redirect(url_for("show_post", post_id=post_id))
         else:
-            flash("You need an account to do that")
+            flash("You need an account to do that", category="error")
             return redirect(url_for('login'))
     
     elif (request.args.get("comment_id") != None):
@@ -289,8 +289,11 @@ def contact(logged_in=False, admin=False):
 def add_new_post(logged_in=False, admin=False):
     form = CreatePostForm()
     if form.validate_on_submit():
+        if (current_user.is_anonymous):
+            flash("You need an account to do that", category="error")
+            return redirect(url_for('login'))
         #If don't exist a post with that title
-        if (BlogPost.query.filter_by(title=form.title.data).first() == None):
+        elif (BlogPost.query.filter_by(title=form.title.data).first() == None):
             new_post = BlogPost(
                 title=form.title.data,
                 subtitle=form.subtitle.data,

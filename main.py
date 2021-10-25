@@ -406,4 +406,4 @@ def change_password(key, user_id, logged_in=False, admin=False):
         abort(403)
 
 if __name__ == "__main__":
-    app.run(port=5000, debug=True)
+    app.run(port=5000)

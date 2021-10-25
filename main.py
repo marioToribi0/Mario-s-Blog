@@ -13,9 +13,9 @@ import smtplib
 
 #ENVIROMENT VARIABLES
 from os import environ
-from dotenv import load_dotenv, find_dotenv
+# from dotenv import load_dotenv, find_dotenv
 
-load_dotenv(find_dotenv())
+# load_dotenv(find_dotenv())
 
 secret_key = environ["SECRET_KEY"]
 EMAIL = environ["EMAIL"]

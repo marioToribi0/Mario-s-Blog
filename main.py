@@ -7,17 +7,23 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm, ForgetPasswordForm, ChangePasswordForm
-# from flask_gravatar import Gravatar
 from hashlib import md5
 from functools import wraps
 import smtplib
 
-EMAIL = "yourconnectedknowledge@gmail.com"
-MAIL = "yuniormtr@gmail.com"
-PASSWORD = "[K>wpuDv)i!3}!y+"
+#ENVIROMENT VARIABLES
+from os import environ
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv(find_dotenv())
+
+secret_key = environ["SECRET_KEY"]
+EMAIL = environ["EMAIL"]
+MAIL = environ["MAIL"]
+PASSWORD = environ['PASSWORD']
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
+app.config['SECRET_KEY'] = secret_key
 ckeditor = CKEditor(app)
 Bootstrap(app)
 
@@ -76,7 +82,7 @@ def only_admin(function):
 
 #Function to send messages
 def send_email_message(subject: str,body: str, mail_to_send):
-    text = f"Subject: {subject}\n{body}"
+    text = f"Subject: {subject}\nFrom: Mario's Blog\n{body}"
     text = text.encode("UTF-8")
     with smtplib.SMTP("smtp.gmail.com", 587, timeout=120) as connection:
                 connection.starttls()
@@ -264,7 +270,7 @@ def contact(logged_in=False, admin=False):
         phone = request.form['phone']
         message = request.form["message"]
 
-        subject = "New_message"
+        subject = "New message"
         body = f"Name: {name}\nPhone: {phone}\nMail: {mail}\n\n\t{message}"
 
         send_email_message(subject=subject, body=body, mail_to_send=MAIL)
